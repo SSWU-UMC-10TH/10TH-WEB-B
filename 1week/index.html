@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UMC TODO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="todo">
+    <h1 class="todo__title">ToDo List</h1>
+
+    <div class="todo__input-box">
+      <input type="text" class="todo__input" placeholder="할 일 입력" />
+      <button class="todo__add-btn">할 일 추가</button>
+    </div>
+
+    <div class="todo__lists">
+      <div class="todo__section">
+        <h2 class="todo__section-title">할 일</h2>
+        <ul class="todo__list todo__list--active"></ul>
+      </div>
+
+      <div class="todo__section">
+        <h2 class="todo__section-title">완료</h2>
+        <ul class="todo__list todo__list--completed"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script type="module" src="dist/index.js"></script> -->
+   <script>
+    const input = document.querySelector('.todo__input');
+    const addBtn = document.querySelector('.todo__add-btn');
+    const activeList = document.querySelector('.todo__list--active');
+    const completedList = document.querySelector('.todo__list--completed');
+ 
+    function createTodoItem(text) {
+      const li = document.createElement('li');
+      li.className = 'todo__item';
+ 
+      const span = document.createElement('span');
+      span.textContent = text;
+ 
+      const completeBtn = document.createElement('button');
+      completeBtn.textContent = '완료';
+      completeBtn.className = 'todo__btn todo__btn--complete';
+ 
+      completeBtn.addEventListener('click', function () {
+        moveToCompleted(li, text);
+      });
+ 
+      li.appendChild(span);
+      li.appendChild(completeBtn);
+      return li;
+    }
+ 
+    function moveToCompleted(item, text) {
+      item.remove();
+ 
+      const li = document.createElement('li');
+      li.className = 'todo__item';
+ 
+      const span = document.createElement('span');
+      span.textContent = text;
+ 
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '삭제';
+      deleteBtn.className = 'todo__btn todo__btn--delete';
+ 
+      deleteBtn.addEventListener('click', function () {
+        li.remove();
+      });
+ 
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+      completedList.appendChild(li);
+    }
+ 
+    addBtn.addEventListener('click', function () {
+      const value = input.value.trim();
+      if (!value) return;
+      const item = createTodoItem(value);
+      activeList.appendChild(item);
+      input.value = '';
+    });
+ 
+   </script>
+</body>
+</html>
