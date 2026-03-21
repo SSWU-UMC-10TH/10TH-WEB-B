@@ -1,0 +1,109 @@
+.Todo_wrap {
+    margin: 0 auto;
+    width: 350px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.Todo_title {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.Todo_input_text {
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    height: 30px;
+}
+
+.Todo_input_button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    height: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.Todo_input_button:hover {
+    background-color: #218838;
+}
+
+.render_container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    h2 {
+        font-size: 15px;
+    }
+}
+
+.render_container_section {
+    width: 175px;
+}
+
+.render_container_list,
+.render_container_done {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.delete_button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.delete_button:hover {
+    background-color: #c82333;
+}
+
+.commit_button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.commit_button:hover {
+    background-color: #218838;
+}
+
+.list_item,
+.done_item {
+    width: 140px;
+    height: 20px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+
+}
+
+.render_container_item_text {
+    margin-bottom: 100%;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.hidden {
+    display: none;
+}
