@@ -1,11 +1,10 @@
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
-import { useTodo } from '../context/TodoContext'
+import { useTodo } from '../../context/TodoContext'
 
 const TodoAfter = () => {
      const { todos, completeTodo, deleteTodo, doneTodos } = useTodo();
 
-   
     return (
         <div className="Todo_wrap">
             <h1 className="Todo_title">To Do List</h1>

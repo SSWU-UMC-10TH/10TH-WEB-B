@@ -1,5 +1,5 @@
 import TodoAfter from './components/TodoAfter'
-import { TodoProvider } from './context/TodoContext'
+import { TodoProvider } from '../context/TodoContext'
 
 const App = () => {
   return (

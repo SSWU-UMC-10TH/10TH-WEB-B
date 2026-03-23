@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {useTodo} from '../context/TodoContext'
+import {useTodo} from '../../context/TodoContext'
 
 const TodoForm = () => {
     const [input, setInput] = useState<string>('');

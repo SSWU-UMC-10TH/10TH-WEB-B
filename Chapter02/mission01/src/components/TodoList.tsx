@@ -1,4 +1,4 @@
-import type { TTodo } from '../types/Todo';
+import type { TTodo } from '../../types/Todo';
 
 interface TodoListProps {
     title: string;

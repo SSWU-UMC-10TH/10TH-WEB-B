@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import type { TTodo } from '../types/Todo';
+import type { TTodo } from '../../types/Todo';
 
 const Todo = () => {
     const [todos, setTodos] = useState<TTodo[]>([]);
