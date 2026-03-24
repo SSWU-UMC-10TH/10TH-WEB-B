@@ -1,0 +1,4 @@
+node_modules/
+week2_mission1/node_modules/
+dist/
+.env
