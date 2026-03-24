@@ -5,39 +5,28 @@ const todoList = document.getElementById('todo-list');
 const doneList = document.getElementById('done-list');
 let todos = [];
 let doneTasks = [];
-const renderTasks = () => {
-    todoList.innerHTML = '';
-    doneList.innerHTML = '';
-    todos.forEach((todo) => {
-        const li = createTodoElement(todo, false);
-        todoList.appendChild(li);
-    });
-    doneTasks.forEach((todo) => {
-        const li = createTodoElement(todo, true);
-        doneList.appendChild(li);
-    });
-};
 const getTodoText = () => {
     return todoInput.value.trim();
 };
 const addTodo = (text) => {
     todos.push({ id: Date.now(), text });
+    console.log(todos);
     todoInput.value = '';
     renderTasks();
 };
-const completeTodo = (todo) => {
-    todos = todos.filter((t) => t.id !== todo.id);
-    doneTasks.push(todo);
+const completeTask = (task) => {
+    todos = todos.filter((t) => t.id !== task.id);
+    doneTasks.push(task);
     renderTasks();
 };
-const deleteTodo = (todo) => {
-    doneTasks = doneTasks.filter((t) => t.id !== todo.id);
+const deleteTask = (task) => {
+    doneTasks = doneTasks.filter((t) => t.id !== task.id);
     renderTasks();
 };
-const createTodoElement = (todo, isDone) => {
+const createTaskElement = (task, isDone) => {
     const li = document.createElement('li');
     li.classList.add('render-container__item');
-    li.textContent = todo.text;
+    li.textContent = task.text;
     const button = document.createElement('button');
     button.classList.add('render-container__item-button');
     if (isDone) {
@@ -50,14 +39,26 @@ const createTodoElement = (todo, isDone) => {
     }
     button.addEventListener('click', () => {
         if (isDone) {
-            deleteTodo(todo);
+            deleteTask(task);
         }
         else {
-            completeTodo(todo);
+            completeTask(task);
         }
     });
     li.appendChild(button);
     return li;
+};
+const renderTasks = () => {
+    todoList.innerHTML = '';
+    doneList.innerHTML = '';
+    todos.forEach((task) => {
+        const li = createTaskElement(task, false);
+        todoList.appendChild(li);
+    });
+    doneTasks.forEach((task) => {
+        const li = createTaskElement(task, true);
+        doneList.appendChild(li);
+    });
 };
 todoForm.addEventListener('submit', (event) => {
     event.preventDefault();
