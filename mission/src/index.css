@@ -1,5 +1,5 @@
 @import "tailwindcss";
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -111,4 +111,4 @@ body {
 
 .render-container__item-button:hover {
     background-color: #c82333;
-}
+} */
