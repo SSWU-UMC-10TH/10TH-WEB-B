@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Single Page Application</title>
+    </head>
+    <body>
+        <nav>
+            <a href="/" data-link>홈</a>
+            <a href="/about" data-link>소개</a>
+            <a href="/profile" data-link>프로필</a>
+        </nav>
+
+        <div id="app"></div>
+        <script>
+            const routes = {
+                "/": "<h1>홈</h1><p>여기는 홈입니다.</p>",
+                "/about": "<h1>소개</h1><p>여기는 소개 페이지입니다.</p>",
+                "/profile": "<h1>프로필</h1><p>여기는 프로필 페이지입니다.</p>",
+            };
+
+            function render() {
+                const path = window.location.pathname;
+                const app = document.getElementById("app");
+                app.innerHTML = routes[path] || "<h1>404</h1><p>페이지를 찾을 수 없습니다.</p>";
+            }
+
+            function navigateTo(url) {
+                history.pushState(null, null, url);
+                render();
+            }
+
+            document.addEventListener("click", (e) => {
+                const link = e.target.closest("[data-link]");
+                if (!link) return;
+
+                e.preventDefault();
+                navigateTo(link.href);
+            });
+
+            window.addEventListener("popstate", render);
+
+            render();
+        </script>
+    </body>
+</html>
