@@ -21,3 +21,21 @@ export type MovieResponse={
     totalPages: number,
     total_results: number,
 };
+export type MovieDetail = { 
+    id: number; 
+    title: string; 
+    overview: string; 
+    poster_path: string; 
+    backdrop_path: string; 
+    vote_average: number; 
+    release_date: string; 
+    runtime: number; 
+};
+export interface Credits {
+  cast: {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string;
+  }[];
+}
