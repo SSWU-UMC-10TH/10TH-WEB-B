@@ -19,11 +19,13 @@ interface Credits {
     cast: Array<{
         id: number;
         name: string;
+        profile_path: string | null;
     }>;
     crew: Array<{
         id: number;
         job: string;
         name: string;
+        profile_path: string | null;
     }>;
 }
 
@@ -71,6 +73,7 @@ const MovieDetailPage = () => {
                     cast: creditsResponse.data.cast.slice(0, 5).map((member) => ({
                         id: member.id,
                         name: member.name,
+                        profile_path: member.profile_path,
                     })),
                     crew: creditsResponse.data.crew
                         .filter((member) => member.job === "Director")
@@ -78,6 +81,7 @@ const MovieDetailPage = () => {
                             id: member.id,
                             job: member.job,
                             name: member.name,
+                            profile_path: member.profile_path,
                         })),
                 });
             } catch {
@@ -107,8 +111,21 @@ const MovieDetailPage = () => {
     }
 
     return (
-        <section className="min-h-screen bg-white p-6 text-black">
-            <div className="mx-auto max-w-5xl space-y-8">
+        <section className="relative min-h-screen overflow-hidden bg-black p-6 text-white">
+            {movie.poster_path && (
+                <div className="absolute inset-x-0 top-0 h-[44rem] overflow-hidden">
+                    <div
+                        className="absolute inset-0 scale-110 bg-cover bg-center blur-md"
+                        style={{
+                            backgroundImage: `url(${IMAGE_BASE_URL}${movie.poster_path})`,
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-black/55" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black" />
+                </div>
+            )}
+
+            <div className="relative z-10 mx-auto max-w-5xl space-y-8">
                 <div className="flex gap-8">
                     <div className="w-64 shrink-0">
                         {movie.poster_path ? (
@@ -127,14 +144,16 @@ const MovieDetailPage = () => {
                     <div className="flex-1 space-y-4">
                         <div>
                             <h1 className="text-3xl font-bold">{movie.title}</h1>
-                            <p className="text-gray-600">{movie.original_title}</p>
                         </div>
 
-                        <p>{movie.release_date}</p>
-                        <p>{movie.runtime ? `${movie.runtime} min` : "-"}</p>
-
-                        {movie.tagline && <p className="text-gray-600">{movie.tagline}</p>}
-
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-300">
+                            <p className="rounded-full border px-3 py-1">
+                                Release {movie.release_date}
+                            </p>
+                            <p className="rounded-full border px-3 py-1">
+                                Runtime {movie.runtime ? `${movie.runtime} min` : "-"}
+                            </p>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                             {movie.genres.map((genre) => (
                                 <span key={genre.id} className="rounded border px-3 py-1 text-sm">
@@ -150,25 +169,48 @@ const MovieDetailPage = () => {
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold">Cast</h2>
-                    <div className="grid gap-3">
-                        {credits.cast.map((member) => (
-                            <div key={member.id} className="rounded border p-3">
-                                {member.name}
-                            </div>
-                        ))}
+                <div className="grid gap-8 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm md:grid-cols-[minmax(0,1fr)_240px]">
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-semibold">Cast</h2>
+                        <div className="flex gap-4 overflow-x-auto pb-2">
+                            {credits.cast.map((member) => (
+                                <div key={member.id} className="w-24 shrink-0 text-center">
+                                    {member.profile_path ? (
+                                        <img
+                                            src={`${IMAGE_BASE_URL}${member.profile_path}`}
+                                            alt={member.name}
+                                            className="mx-auto h-24 w-24 rounded-full border-2 border-white object-cover"
+                                        />
+                                    ) : (
+                                        <div className="mx-auto h-24 w-24 rounded-full bg-gray-200" />
+                                    )}
+                                    <p className="mt-2 text-sm">{member.name}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold">Director</h2>
-                    <div className="grid gap-3">
-                        {credits.crew.map((member) => (
-                            <div key={`${member.id}-${member.job}`} className="rounded border p-3">
-                                {member.name}
-                            </div>
-                        ))}
+                    <div className="space-y-4">
+                        <h2 className="text-2xl font-semibold">Director</h2>
+                        <div className="flex gap-4 overflow-x-auto pb-2">
+                            {credits.crew.map((member) => (
+                                <div
+                                    key={`${member.id}-${member.job}`}
+                                    className="w-24 shrink-0 text-center"
+                                >
+                                    {member.profile_path ? (
+                                        <img
+                                            src={`${IMAGE_BASE_URL}${member.profile_path}`}
+                                            alt={member.name}
+                                            className="mx-auto h-24 w-24 rounded-full border-2 border-white object-cover"
+                                        />
+                                    ) : (
+                                        <div className="mx-auto h-24 w-24 rounded-full bg-gray-200" />
+                                    )}
+                                    <p className="mt-2 text-sm">{member.name}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
