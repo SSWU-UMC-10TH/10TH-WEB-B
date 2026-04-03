@@ -1,8 +1,11 @@
+import { postSignin } from "../apis/auth";
 import useForm from "../hooks/useForm";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { type UserSigninInformation, validateSignin } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const {setItem} = useLocalStorage('LOCAL_STORAGE_KEY.accessToken')
     const navigate = useNavigate();
 
     const { values, errors, touched, getInputProps } = useForm<UserSigninInformation>({
@@ -14,6 +17,12 @@ const Login = () => {
     })
 
     const handleSubmit = async () => {
+        try {
+            const response = await postSignin(values);
+            setItem(response.data.accessToken);
+        } catch(error: any) {
+            alert(error?.message);
+        }
     };
 
     const isDisabled = Object.values(errors || {}).some((error) => error.length > 0) ||
@@ -23,8 +32,8 @@ const Login = () => {
     return (
         <div className="flex flex-col items-center justify-center h-full gap-4 bg-black">
             <div className="flex items-center justify-between px-4 py-2">
-            <button onClick={() => navigate(-1)} className="text-white -ml-30 mr-25 text-xl cursor-pointer">{`<`}</button>
-            <div className="text-white">로그인</div>
+                <button onClick={() => navigate(-1)} className="text-white -ml-30 mr-20 text-xl cursor-pointer">{`<`}</button>
+                <div className="text-white text-xl font-bold translate-x-[8px]">로그인</div>
             </div>
             <div className="flex flex-col gap-3">
                 <input
