@@ -24,7 +24,6 @@ const LoginPage = () => {
 
     const handleSubmit = async () => {
         console.log(values);
-
         try {
             const response = await postSignin(values);
             setAccessToken(response.data.accessToken);

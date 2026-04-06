@@ -2,15 +2,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { postSignup } from "../apis/auth";
 
 const schema = z
     .object({
-        email: z.string().email("올바른 이메일 형식이 아닙니다."),
-        password: z.string().min(8, "비밀번호는 8자 이상이어야 합니다."),
-        passwordCheck: z.string(),
-        name: z.string().min(1, "닉네임을 입력해주세요."),
+        email: z.string().email({ message: "올바른 이메일 형식이 아닙니다." }),
+        password: z.string().min(8, { message: "비밀번호는 8자 이상이어야 합니다." }),
+        passwordCheck: z.string().min(8, { message: "비밀번호는 8자 이상이어야 합니다." }),
+        name: z.string().min(1, { message: "닉네임을 입력해주세요." }),
     })
     .refine((data) => data.password === data.passwordCheck, {
         message: "비밀번호가 일치하지 않습니다.",
@@ -31,26 +33,49 @@ const SignupPage = () => {
         handleSubmit,
         watch,
         trigger,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: "onBlur",
         defaultValues: {
             email: storedEmail,
+            password: "",
+            passwordCheck: "",
+            name: "",
         },
     });
 
     const email = watch("email");
     const password = watch("password");
     const passwordCheck = watch("passwordCheck");
+    const passwordsMismatch =
+        step === 2 &&
+        password.length >= 8 &&
+        passwordCheck.length >= 8 &&
+        password !== passwordCheck;
 
-    const onSubmit = (data: FormFields) => {
-        console.log("회원가입 완료!", data);
-        // postSignup(data);
+    const onSubmit = async (data: FormFields) => {
+        try {
+            await postSignup({
+                email: data.email,
+                password: data.password,
+                name: data.name,
+            });
+
+            setStoredEmail("");
+            navigate("/");
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                alert(error.response?.data?.message ?? error.message);
+                return;
+            }
+
+            alert("회원가입 중 오류가 발생했습니다.");
+        }
     };
 
     const onGoogleLogin = () => {
-        console.log("구글 로그인 버튼 클릭됨");
+        console.log("구글 로그인 버튼 클릭");
         // 여기에 실제 구글 로그인 로직 추가 예정
     };
 
@@ -58,11 +83,10 @@ const SignupPage = () => {
         if (step === 1 && (await trigger("email"))) {
             setStoredEmail(email);
             setStep(2);
-        } else if (
-            step === 2 &&
-            (await trigger(["password", "passwordCheck"])) &&
-            password === passwordCheck
-        ) {
+        } else if (step === 2) {
+            const isPasswordValid = await trigger(["password", "passwordCheck"]);
+
+            if (!isPasswordValid || password !== passwordCheck) return;
             setStep(3);
         }
     };
@@ -128,7 +152,7 @@ const SignupPage = () => {
                             <button
                                 type="button"
                                 onClick={handleNext}
-                                className="h-12 w-full rounded-md bg-zinc-900 text-base font-semibold text-zinc-200 transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-500"
+                                className="h-12 w-full rounded-md bg-pink-400 text-base font-semibold text-zinc-200 transition-colors hover:bg-pink-500 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-500"
                                 disabled={!email}
                             >
                                 다음
@@ -170,7 +194,7 @@ const SignupPage = () => {
                                     {...register("passwordCheck")}
                                     placeholder="비밀번호를 다시 입력해주세요!"
                                     className={`h-12 w-full rounded-md border bg-zinc-950 px-4 pr-14 text-white placeholder:text-sm placeholder:text-zinc-500 focus:outline-none ${
-                                        errors.passwordCheck
+                                        errors.passwordCheck || passwordsMismatch
                                             ? "border-red-500 bg-red-950/30"
                                             : "border-zinc-700"
                                     }`}
@@ -184,17 +208,21 @@ const SignupPage = () => {
                                     {showPasswordCheck ? "숨김" : "보기"}
                                 </button>
                             </div>
-                            {errors.passwordCheck && (
+                            {errors.passwordCheck ? (
                                 <div className="text-sm text-red-400">
                                     {errors.passwordCheck.message}
                                 </div>
-                            )}
+                            ) : passwordsMismatch ? (
+                                <div className="text-sm text-red-400">
+                                    비밀번호가 일치하지 않습니다.
+                                </div>
+                            ) : null}
 
                             <button
                                 type="button"
                                 onClick={handleNext}
-                                className="h-12 w-full rounded-md bg-zinc-900 text-base font-semibold text-zinc-200 transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-500"
-                                disabled={!password || !passwordCheck}
+                                className="h-12 w-full rounded-md bg-pink-400 text-base font-semibold text-zinc-200 transition-colors hover:bg-pink-500 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-500"
+                                disabled={!password || !passwordCheck || passwordsMismatch}
                             >
                                 다음
                             </button>
@@ -207,9 +235,7 @@ const SignupPage = () => {
                                 {...register("name")}
                                 placeholder="닉네임을 입력해주세요!"
                                 className={`h-12 rounded-md border bg-zinc-950 px-4 text-white placeholder:text-sm placeholder:text-zinc-500 focus:outline-none ${
-                                    errors.name
-                                        ? "border-red-500 bg-red-950/30"
-                                        : "border-zinc-700"
+                                    errors.name ? "border-red-500 bg-red-950/30" : "border-zinc-700"
                                 }`}
                             />
                             {errors.name && (
@@ -218,7 +244,8 @@ const SignupPage = () => {
 
                             <button
                                 type="submit"
-                                className="h-12 w-full rounded-md bg-zinc-900 text-base font-semibold text-zinc-200 transition-colors hover:bg-zinc-800"
+                                disabled={isSubmitting}
+                                className="h-12 w-full rounded-md bg-pink-400 text-base font-semibold text-zinc-200 transition-colors hover:bg-pink-500 disabled:cursor-not-allowed disabled:bg-zinc-900 disabled:text-zinc-500"
                             >
                                 회원가입 완료
                             </button>
