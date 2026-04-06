@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const navigate = useNavigate();
-
-    const onGoogleLogin = () => {
-        console.log("구글 로그인 버튼 클릭됨");
-    };
-
     const { values, errors, touched, getInputProps } = useForm<UserSigninInformation>({
         initialValue: {
             email: "",
@@ -17,7 +12,13 @@ const LoginPage = () => {
         validate: validateSignin,
     });
 
-    const handleSubmit = () => {};
+    const handleSubmit = async () => {
+        console.log(values);
+    };
+
+    const onGoogleLogin = () => {
+        console.log("구글 로그인 버튼 클릭됨");
+    };
 
     const isDisabled =
         Object.values(errors || {}).some((error) => error.length > 0) ||
@@ -45,35 +46,39 @@ const LoginPage = () => {
                     구글 로그인
                 </button>
 
+                <div className="w-[300px] flex items-center gap-4 my-1">
+                    <div className="flex-1 h-px bg-gray-500" />
+                    <span className="text-sm font-semibold text-gray-300 tracking-wide">OR</span>
+                    <div className="flex-1 h-px bg-gray-500" />
+                </div>
+
                 <input
                     {...getInputProps("email")}
                     name="email"
-                    className={`border border-[#ccc] w-[300px] p-[10px] focus.border-[#87bff] rounded-sm
-            ${errors?.email && touched?.email ? "border-red-500 bg-red-200" : "border-gray-300"}`}
+                    className={`border border-[#ccc] w-[300px] bg-black p-[10px] focus:border-[#807bff] outline-none rounded-md
+            ${errors?.email && touched?.email ? "bg-black" : "border-gray-300"}`}
                     type={"email"}
                     placeholder={"이메일"}
                 />
                 {errors?.email && touched?.email && (
                     <div className="text-red-500 text-sm">{errors.email}</div>
                 )}
-
                 <input
                     {...getInputProps("password")}
                     name="password"
-                    className={`border border-[#ccc] w-[300px] p-[10px] focus.border-[#87bff] rounded-sm
-            ${errors?.password && touched?.password ? "border-red-500 bg-red-200" : "border-gray-300"}`}
+                    className={`border border-[#ccc] w-[300px] bg-black p-[10px] focus:border-[#807bff] outline-none rounded-md
+            ${errors?.password && touched?.password ? "bg-black" : "border-gray-300"}`}
                     type={"password"}
                     placeholder={"비밀번호"}
                 />
                 {errors?.password && touched?.password && (
                     <div className="text-red-500 text-sm">{errors.password}</div>
                 )}
-
                 <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={isDisabled}
-                    className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-gray-300"
+                    className="w-full bg-pink-500 text-white py-3 rounded-md text-lg font-medium hover:bg-pink-600 transition-colors cursor-pointer disabled:bg-gray-900 disabled:text-gray-500 disabled:cursor-not-allowed"
                 >
                     로그인
                 </button>
