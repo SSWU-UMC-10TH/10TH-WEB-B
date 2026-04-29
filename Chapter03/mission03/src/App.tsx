@@ -8,19 +8,19 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />, 
-    errorElement: <NotFound />,
+    element: <HomePage/>,
+    errorElement: <NotFound/>,
     children: [
       {
         path: 'movies/:category',
-        element: <MoviePage />,
+        element: <MoviePage/>,
       },
+      {
+        path: 'movie/:movieId',
+        element: <MovieDetailPage />,
+      }
     ],
   },
-  {
-    path: 'movie/:movieId',
-    element: <MovieDetailPage />,
-  }
 ]);
 
 function App() {
