@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMC TODO</title>
+    <link rel="stylesheet" href="./Todo.css">
+    <script type="module" src="../dist/Todo.js" defer></script>
+</head>
+
+<body>
+    <div class="Todo_wrap">
+        <h1 class="Todo_title">TO DO LIST</h1>
+        <div class="Todo_input">
+            <input type="text" id="Todo-input" class="Todo_input_text" placeholder="할 일을 입력해주세요.">
+            <button type="submit" class="Todo_input_button">할 일 추가</button>
+        </div>
+
+        <div class="render_container">
+            <div class="render_container_section">
+                <h2>할 일</h2>
+                <ul id="todo-list" class="render_container_list">
+                </ul>
+            </div>
+            <div class="render_container_section">
+                <h2>완료</h2>
+                <ul id="done-list" class="render_container_done">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
