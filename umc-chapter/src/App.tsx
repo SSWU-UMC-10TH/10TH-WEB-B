@@ -9,29 +9,6 @@ import MyPage from './pages/MyPage'
 import { AuthProvider } from './context/AuthContext'
 import {ProtectedLayout} from './layouts/ProtectedLayout.tsx'
 
-// const publicRoutes: RouteObject[] = [
-//   {
-//     path: "/",
-//     element: <HomeLayout/>,
-//     errorElement: <NotFoundPage/>,
-//     children: [
-//       {index: true, element: <HomePage/>},
-//       {path: 'login', element: <LoginPage/>},
-//       {path: 'signup', element: <SignupPage/>},
-//     ],
-//   }
-// ]
-
-// const protectedRoutes: RouteObject[] = [
-//   {
-//     path: "/",
-//     element: <ProtectedLayout/>,
-//     errorElement: <NotFoundPage/>,
-//     children: [
-//       {path: 'my', element: <MyPage/>}
-//     ],
-//   }
-// ]
 
 const router = createBrowserRouter([
   {
