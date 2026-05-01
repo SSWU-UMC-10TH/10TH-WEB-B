@@ -34,7 +34,7 @@ const protectedRoutes: RouteObject[] = [
         ],
     },
 ];
-const router = createBrowserRouter([...publicRoutes]);
+const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 
 function App() {
     return (
