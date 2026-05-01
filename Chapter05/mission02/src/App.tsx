@@ -14,7 +14,7 @@ const publicRoutes: RouteObject[] = [
         element: <HomeLayout />,
         errorElement: <NotFoundPage />,
         children: [
-            { index: false, element: <HomePage /> },
+            { index: true, element: <HomePage /> },
             { path: "login", element: <LoginPage /> },
             { path: "signup", element: <SignupPage /> },
         ],
@@ -34,7 +34,7 @@ const protectedRoutes: RouteObject[] = [
         ],
     },
 ];
-const router = createBrowserRouter([...publicRoutes]);
+const router = createBrowserRouter([...publicRoutes, ...protectedRoutes]);
 
 function App() {
     return (
