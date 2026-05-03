@@ -26,7 +26,12 @@ const SignupPage = () => {
     const [step, setStep] = useState(1);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordCheck, setShowPasswordCheck] = useState(false);
-    const [storedEmail, setStoredEmail] = useLocalStorage("signup-email", "");
+    const {
+        getItem: getStoredEmail,
+        setItem: setStoredEmailInStorage,
+        removeItem: removeStoredEmail,
+    } = useLocalStorage("signup-email");
+    const [storedEmail, setStoredEmail] = useState<string>(getStoredEmail() ?? "");
 
     const {
         register,
@@ -63,6 +68,7 @@ const SignupPage = () => {
             });
 
             setStoredEmail("");
+            removeStoredEmail();
             navigate("/");
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -82,6 +88,7 @@ const SignupPage = () => {
     const handleNext = async () => {
         if (step === 1 && (await trigger("email"))) {
             setStoredEmail(email);
+            setStoredEmailInStorage(email);
             setStep(2);
         } else if (step === 2) {
             const isPasswordValid = await trigger(["password", "passwordCheck"]);
