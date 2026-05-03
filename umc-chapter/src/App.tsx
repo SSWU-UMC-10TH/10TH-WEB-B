@@ -6,8 +6,9 @@ import LoginPage from './pages/LoginPage'
 import HomeLayout from './layouts/HomeLayout.tsx'
 import SignupPage from './pages/SignupPage'
 import MyPage from './pages/MyPage'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
 import {ProtectedLayout} from './layouts/ProtectedLayout.tsx'
+import GoogleLoginRedirectPage from './pages/GoogleLoginRedirectPage.tsx'
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       {index: true, element: <HomePage/>},
       {path: 'login', element: <LoginPage/>},
       {path: 'signup', element: <SignupPage/>},
+      {path: "/api/auth/google/callback", element: <GoogleLoginRedirectPage/>},
       {
         element: <ProtectedLayout/>,
         children: [
