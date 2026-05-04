@@ -8,6 +8,7 @@ import { postSignin } from "../apis/auth";
 
 
 const LoginPage = () => {
+    console.log(import.meta.env.VITE_SERVER_API_URL);
     const { setItem } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
   const {getInputProps, errors, touched, values } = useForm<UserSigninInformation>( {
     initialValue: {
@@ -23,10 +24,13 @@ const LoginPage = () => {
     try {
         const response = await postSignin(values);
         setItem(response.data.accessToken);
+        localStorage.setItem(
+            LOCAL_STORAGE_KEY.refreshToken, 
+            JSON.stringify(response.data.refreshToken));
     } catch (error) {
-        alert(error?.message);
+        alert(error?.message || "로그인 실패");
     }
-    console.log(message);
+    //console.log(message);
   };
 
   //오류가 하나라도 있거나, 입력값이 비어있으면 버튼을 비활성화
