@@ -4,13 +4,20 @@ import useForm from "../../hooks/useForm"
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { postSignin } from "../apis/auth";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 
 const LoginPage = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // 이전 페이지 경로 가져오기
+
+    const from = location.state?.from?.pathname || "/";
     console.log(import.meta.env.VITE_SERVER_API_URL);
     const { setItem } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
-  const {getInputProps, errors, touched, values } = useForm<UserSigninInformation>( {
+    const {getInputProps, errors, touched, values } = useForm<UserSigninInformation>( {
     initialValue: {
         email: "",
         password: "",
@@ -22,15 +29,21 @@ const LoginPage = () => {
     console.log(values);
 
     try {
-        const response = await postSignin(values);
-        setItem(response.data.accessToken);
-        localStorage.setItem(
-            LOCAL_STORAGE_KEY.refreshToken, 
-            JSON.stringify(response.data.refreshToken));
-    } catch (error) {
-        alert(error?.message || "로그인 실패");
-    }
-    //console.log(message);
+    const response = await postSignin(values);
+
+    setItem(response.data.accessToken);
+
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY.refreshToken,
+      JSON.stringify(response.data.refreshToken)
+    );
+
+    
+    navigate(from, { replace: true });
+
+  } catch (error: any) {
+    alert(error?.message || "로그인 실패");
+  }
   };
 
   //오류가 하나라도 있거나, 입력값이 비어있으면 버튼을 비활성화
