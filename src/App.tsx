@@ -7,6 +7,7 @@ import HomeLayout from '../layouts/HomeLayout'
 import SignupPage from './pages/SignupPage';
 import MyPage from './pages/MyPage'
 import ProtectedRoute from "./components/ProtectedRoute";
+import LpDetailPage from './pages/LpDetailPage';
 //1. 홈페이지
 //2. 로그인 페이지
 //3. 회원가입 페이지
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
-    errorElement: <NotFoundPage />,
+    //errorElement: <NotFoundPage />,
     children : [
       {index: true, element: <HomePage />},
       {path: "login", element: <LoginPage />},
@@ -23,7 +24,18 @@ const router = createBrowserRouter([
       {path: "my", element: (
       <ProtectedRoute>
         <MyPage />
-      </ProtectedRoute>)}],
+      </ProtectedRoute>
+      )},
+      {path: "lp/:lpid", element: (
+        <ProtectedRoute>
+          <LpDetailPage />
+        </ProtectedRoute>
+      )}
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   }
 ]);
 function App() {

@@ -4,8 +4,10 @@ const HomeLayout = () => {
   return (
     <div className="h-dvh flex-col">
         <nav>네비게이션 바입니다.</nav>
-        <main className="flex-1">홈페이지</main>
+        <main className="flex-1">
             <Outlet />
+        </main>
+            
         <footer>푸터</footer>
     </div>
     );
