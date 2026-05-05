@@ -11,6 +11,7 @@ import {ProtectedLayout} from './layouts/ProtectedLayout.tsx'
 import GoogleLoginRedirectPage from './pages/GoogleLoginRedirectPage.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import LpDetailPage from './pages/LPDetailPage.tsx'
 
 
 const router = createBrowserRouter([
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
       {
         element: <ProtectedLayout/>,
         children: [
-          {path: 'me', element: <MyPage/>}
+          {path: 'me', element: <MyPage/>},
+          { path: 'lp/:lpId', element: <LpDetailPage /> },
         ]
       }
     ],

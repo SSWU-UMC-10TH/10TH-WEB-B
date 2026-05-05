@@ -62,7 +62,7 @@ const HomePage = () => {
                                 <h3 className="font-bold text-white text-sm truncate">{lp.title}</h3>
                                 <p className="text-[10px] text-gray-400 mt-1">{new Date(lp.createdAt).toLocaleDateString()}</p>
                                 <div className="flex items-center gap-1 mt-2 text-xs text-white">
-                                    <span>❤️</span> {lp.totalLikes || 0}
+                                    <span>❤️</span> {lp.totalLikes ?? lp.likes?.length ?? 0}
                                 </div>
                             </div>
                         </div>
