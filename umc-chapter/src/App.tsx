@@ -9,6 +9,8 @@ import MyPage from './pages/MyPage'
 import { AuthProvider } from './contexts/AuthContext'
 import {ProtectedLayout} from './layouts/ProtectedLayout.tsx'
 import GoogleLoginRedirectPage from './pages/GoogleLoginRedirectPage.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 const router = createBrowserRouter([
@@ -31,14 +33,19 @@ const router = createBrowserRouter([
   },
 ]);
 
+
+export const queryClient = new QueryClient();
+
 function App() {
   
   return (
-  <AuthProvider>
-     <RouterProvider router={router} />
-  </AuthProvider>
- )
-
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+      {import .meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+    </QueryClientProvider>
+  )
 }
 
 export default App
