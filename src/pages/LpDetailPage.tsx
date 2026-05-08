@@ -2,9 +2,16 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getLpDetail, postLikeLp } from '../apis/lp';
 import { useState, useEffect } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getLpComments } from '../apis/lp';
+import { useRef } from 'react';
+
+
 
 const LpDetailPage = () => {
   const { lpid } = useParams();
+  const [order, setOrder] = useState('latest');
+  const loadMoreRef = useRef(null);
 
   // useQuery 먼저
   const { data, isLoading, isError } = useQuery({
@@ -25,6 +32,62 @@ const LpDetailPage = () => {
     setLikes(Array.isArray(lp.likes) ? lp.likes.length : lp.likes ?? 0);
   }
 }, [lp]);
+
+  const {
+  data: commentData,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isLoading: isCommentLoading,
+} = useInfiniteQuery({
+  queryKey: ['lpComments', lpid, order],
+
+  queryFn: ({ pageParam = 0 }: any) =>
+    getLpComments(lpid!, order, pageParam),
+
+  initialPageParam: 0,
+
+  getNextPageParam: (lastPage: any) => {
+    return lastPage.data.hasNext
+      ? lastPage.data.nextCursor
+      : undefined;
+  },
+});
+
+const comments =
+  commentData?.pages.flatMap((page: any) => page.data.data) ?? [];
+
+const CommentSkeleton = () => {
+  return (
+    <div
+      style={{
+        height: '50px',
+        background: '#e0e0e0',
+        borderRadius: '8px',
+        marginBottom: '10px',
+        animation: 'pulse 1.5s infinite',
+      }}
+    />
+  );
+};
+
+useEffect(() => {
+  const observer = new IntersectionObserver((entries) => {
+    if (
+      entries[0].isIntersecting &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  });
+
+  if (loadMoreRef.current) {
+    observer.observe(loadMoreRef.current);
+  }
+
+  return () => observer.disconnect();
+}, [hasNextPage, isFetchingNextPage]);
 
   // 그 다음 조건문
   if (isLoading) return <div>로딩중...</div>;
@@ -109,8 +172,48 @@ const LpDetailPage = () => {
     ❤️ 좋아요
     </button>
 
-    <span>{likes}</span> {/* ⭐ 이게 핵심 */}
+    <span>{likes}</span> 
   </div>
+  {/* 댓글 섹션 */}
+<div style={{ marginTop: '40px' }}>
+  
+  <div style={{ marginBottom: '10px' }}>
+    <button onClick={() => setOrder('latest')}>
+      최신순
+    </button>
+
+    <button onClick={() => setOrder('oldest')}>
+      오래된순
+    </button>
+  </div>
+
+  <div style={{ marginBottom: '20px' }}>
+    <input placeholder="댓글 입력..." />
+    <button>작성</button>
+  </div>
+
+  {isCommentLoading && <CommentSkeleton />}
+
+  {comments.map((comment: any, index: number) => (
+    <div
+      key={comment.id ?? index}
+      style={{
+        borderBottom: '1px solid #ddd',
+        padding: '10px 0',
+      }}
+    >
+      <div>{comment.content}</div>
+
+      <div style={{ fontSize: '12px' }}>
+        {comment.createdAt}
+      </div>
+    </div>
+  ))}
+
+  {isFetchingNextPage && <CommentSkeleton />}
+
+  <div ref={loadMoreRef} style={{ height: '50px' }} />
+</div>
 </div>
   );
 };
