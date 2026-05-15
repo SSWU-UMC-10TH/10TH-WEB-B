@@ -1,9 +1,10 @@
 export const LOCAL_STORAGE_KEY = {
     accessToken: 'accessToken',
     refreshToken: 'refreshToken'
-}
+} as const;
 
-export const QUERY_KEY: {lps: string; lp: string} = {
+export const QUERY_KEY = {
     lps: "lps",
-    lp: "lp"
-}
+    comments: "comments",
+    me: "me",
+} as const;
