@@ -17,12 +17,8 @@ axiosInstance.interceptors.request.use((config) => {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY.accessToken);
     const token = raw ? JSON.parse(raw) : null;
 
-    if (token){
-        config.headers = config.headers || {};
-        if (!config.headers.Authorization) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        console.log("Authorization:", config.headers.Authorization);
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;  // 조건 없이 무조건 세팅
     }
 
     return config;

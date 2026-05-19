@@ -4,7 +4,7 @@ import { axiosInstance } from "./axios";
 
 export const getLpList = async (paginationDto: PaginationDto): Promise<ResponseLpListDto> => {
     const { data } = await axiosInstance.get("v1/lps", {
-        params: { categoryId: 1 }
+        params: paginationDto  // ← 전체 파라미터 그대로 전달
     });
     return data;
 };

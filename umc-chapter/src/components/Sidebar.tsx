@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             `}>
                 <div className="p-8 space-y-8 mt-16 lg:mt-0">
                     <div className="space-y-6">
-                        <div className="text-gray-500 text-xs font-bold uppercase tracking-widest">찾기</div>
+                        <Link to="/" className="block text-gray-500 text-xs font-bold uppercase tracking-widest hover:text-[#FF1781]">찾기</Link>
                         <Link to="/me" className="block text-sm hover:text-[#FF1781]">마이페이지</Link>
                     </div>
 
