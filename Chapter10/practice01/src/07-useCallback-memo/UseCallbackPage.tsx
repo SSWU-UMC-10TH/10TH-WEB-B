@@ -23,8 +23,10 @@ export default function UseCallbackPage() {
             <h2>Count : {count}</h2>
             <CountButton onClick={handleIncreaseCount} />
             <h2>Text</h2>
-            <span>{text}</span>
-            <TextInput onChange={handleText} />
+            <div className="flex flex-col">
+                <span>{text}</span>
+                <TextInput onChange={handleText} />
+            </div>
         </div>
     );
 }
