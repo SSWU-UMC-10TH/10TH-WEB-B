@@ -14,6 +14,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LpDetailPage from "./pages/LpDetailPage";
 import CreateLpPage from "./pages/CreateLpPage";
 import SearchPage from "./pages/SearchPage";
+import ThrottlePage from "./pages/ThrottlePage";
 
 const publicRoutes: RouteObject[] = [
     {
@@ -26,6 +27,7 @@ const publicRoutes: RouteObject[] = [
             { path: "signup", element: <SignupPage /> },
             { path: "search", element: <SearchPage /> },
             { path: "v1/auth/google/callback", element: <GoogleLoginRedirectPage /> },
+            { path: "throttle", element: <ThrottlePage /> },
         ],
     },
 ];
