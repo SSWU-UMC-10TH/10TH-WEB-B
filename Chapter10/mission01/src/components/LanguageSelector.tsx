@@ -1,28 +1,24 @@
-import type { Language } from "../types/movie";
+import { memo } from "react";
+import type { MovieLanguage } from "../types/movie";
 
 interface LanguageOption {
-    value: Language;
+    value: string;
     label: string;
 }
 
 interface LanguageSelectorProps {
-    value: Language;
-    onChange: (value: Language) => void;
-    options: readonly LanguageOption[];
+    value: string;
+    onChange: (value: MovieLanguage) => void;
+    options: LanguageOption[];
     className?: string;
 }
 
-const LanguageSelector = ({
-    value,
-    onChange,
-    options,
-    className = "",
-}: LanguageSelectorProps) => {
+const LanguageSelector = ({ value, onChange, options, className = "" }: LanguageSelectorProps) => {
     return (
         <select
             value={value}
-            onChange={(event) => onChange(event.target.value as Language)}
-            className={className}
+            onChange={(event) => onChange(event.target.value as MovieLanguage)}
+            className={`w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
         >
             {options.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -33,4 +29,4 @@ const LanguageSelector = ({
     );
 };
 
-export default LanguageSelector;
+export default memo(LanguageSelector);

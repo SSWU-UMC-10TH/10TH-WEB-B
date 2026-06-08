@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Movie } from "../types/movie";
 import MovieCard from "./MovieCard";
 
@@ -24,4 +25,4 @@ const MovieList = ({ movies, onSelectMovie }: MovieListProps) => {
     );
 };
 
-export default MovieList;
+export default memo(MovieList);
