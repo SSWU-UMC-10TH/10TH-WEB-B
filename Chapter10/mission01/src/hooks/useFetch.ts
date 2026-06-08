@@ -10,7 +10,6 @@ const useFetch = <T>(url: string, options?: AxiosRequestConfig) => {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            setError(null);
             try {
                 const { data } = await axiosClient.get(url, {
                     ...options,

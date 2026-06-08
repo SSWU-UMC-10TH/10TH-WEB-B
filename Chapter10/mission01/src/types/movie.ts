@@ -1,9 +1,9 @@
-export type Language = "ko-KR" | "en-US" | "ja-JP";
+export type MovieLanguage = "ko-KR" | "en-US" | "ja-JP";
 
 export type MovieFilters = {
     query: string;
     include_adult: boolean;
-    language: Language;
+    language: MovieLanguage;
 };
 
 export type Movie = {
