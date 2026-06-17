@@ -1,47 +1,25 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { type MovieDetail, type Credits } from "../types/movie";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useCustomFetch } from "../hooks/useCustomFetch";
 
 const BASE_IMG = "https://image.tmdb.org/t/p";
 
 const MovieDetailPage = () => {
     const { movieId } = useParams<{ movieId: string }>();
 
-    const [movie, setMovie] = useState<MovieDetail | null>(null);
-    const [credits, setCredits] = useState<Credits | null>(null);
-    const [isPending, setIsPending] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const { data: movie, isPending: moviePending, isError: movieError } =
+        useCustomFetch<MovieDetail>(
+            movieId ? `https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR` : ''
+        );
 
-    useEffect(() => {
-        const fetchDetail = async () => {
-            setIsPending(true);
-            try {
-                const headers = {
-                    Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`
-                };
-                const [movieRes, creditsRes] = await Promise.all([
-                    axios.get<MovieDetail>(
-                        `https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`,
-                        { headers }
-                    ),
-                    axios.get<Credits>(
-                        `https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR`,
-                        { headers }
-                    )
-                ]);
-                setMovie(movieRes.data);
-                setCredits(creditsRes.data);
-            } catch {
-                setIsError(true);
-            } finally {
-                setIsPending(false);
-            }
-        };
+    const { data: credits, isPending: creditsPending, isError: creditsError } =
+        useCustomFetch<Credits>(
+            movieId ? `https://api.themoviedb.org/3/movie/${movieId}/credits?language=ko-KR` : ''
+        );
 
-        fetchDetail();
-    }, [movieId]);
+    const isPending = moviePending || creditsPending;
+    const isError = movieError || creditsError;
 
     if (isPending) return (
         <div className="flex justify-center items-center h-dvh">
@@ -57,8 +35,9 @@ const MovieDetailPage = () => {
 
     if (!movie) return null;
 
-    const director = credits?.crew.find(c => c.job === "Director");
+    const director = credits?.crew.find(c => c.department === "Directing");
 
+    // 나머지 return JSX는 그대로
     return (
         <div className="bg-gray-900 min-h-screen text-white">
             <div className="relative h-96 overflow-hidden">
@@ -102,7 +81,6 @@ const MovieDetailPage = () => {
                 <div className="mt-12">
                     <h2 className="text-2xl font-bold mb-6">감독/출연</h2>
                     <div className="flex gap-6 overflow-x-auto pb-4">
-                        {/* 감독 먼저 */}
                         {director && (
                             <div className="flex flex-col items-center flex-shrink-0 w-24">
                                 <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-700 mb-2">
